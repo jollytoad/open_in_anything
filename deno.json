@@ -2,7 +2,11 @@
   "tasks": {
     "gen": "./scripts/gen.ts",
     "start": "./app/dev.ts",
-    "start:prod": "./app/main.ts"
+    "start:prod": "./app/main.ts",
+    "check": "deno check app/**/*.ts app/**/*.tsx scripts/**/*.ts",
+    "ok": "deno fmt && deno lint && deno task check",
+    "lock": "rm -f deno.lock && deno task check",
+    "outdated": "deno run --no-lock --allow-read=. --allow-net=jsr.io,registry.npmjs.org jsr:@check/deps"
   },
   "imports": {
     "@http/discovery": "jsr:@http/discovery@^0.23.0",
@@ -17,7 +21,6 @@
   },
   "compilerOptions": {
     "verbatimModuleSyntax": true,
-    "isolatedDeclarations": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@http/jsx-stream"

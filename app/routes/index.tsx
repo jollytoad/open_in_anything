@@ -2,7 +2,7 @@ import { html } from "@http/response/html";
 import { seeOther } from "@http/response/see-other";
 import { prependDocType } from "@http/response/prepend-doctype";
 import { renderBody } from "@http/jsx-stream/serialize";
-import { tools } from "../lib/tools.ts";
+import { type Tool, tools } from "../lib/tools.ts";
 
 export function GET(req: Request) {
   return html(
@@ -53,27 +53,7 @@ function Page({ req }: RequestProps) {
             </p>
           )}
 
-          {redirectUrl && tool && (
-            <div class="box warn">
-              <p>
-                Your browser should now open {tool.name}{" "}
-                or ask you to confirm that you want to open it.
-              </p>
-              <p>
-                If nothing is happening then it may be that {tool.name}{" "}
-                is not installed, or you cancelled it.
-              </p>
-              <p>
-                You could {tool.installLink && (
-                  <>
-                    install <a href={tool.installLink}>{tool.name}</a>, or
-                    {" "}
-                  </>
-                )}
-                try an alternative tool:
-              </p>
-            </div>
-          )}
+          {redirectUrl && tool && <OpeningMessage tool={tool} />}
 
           {openUrl && <OpenInLinks req={req} url={openUrl} />}
         </main>
@@ -92,41 +72,57 @@ function Page({ req }: RequestProps) {
   );
 }
 
-interface OpenInProps {
-  req: Request;
-  url: string;
-  use: string;
+function OpeningMessage({ tool }: { tool: Tool }) {
+  return (
+    <div class="box warn">
+      <p>
+        Your browser should now open {tool.name}{" "}
+        or ask you to confirm that you want to open it.
+      </p>
+      <p>
+        If nothing is happening then it may be that {tool.name}{" "}
+        is not installed, or you cancelled it.
+      </p>
+      <p>
+        You could {tool.installLink && (
+          <>
+            install <a href={tool.installLink}>{tool.name}</a>, or
+            {" "}
+          </>
+        )}
+        try an alternative tool:
+      </p>
+    </div>
+  );
 }
 
 function OpenInLinks({ req, url }: RequestProps & { url: string }) {
   return (
     <>
-      {Object.keys(tools).map((use) => (
+      {Object.values(tools).map((tool) => (
         <OpenIn
           req={req}
           url={url}
-          use={use}
+          tool={tool}
         />
       ))}
     </>
   );
 }
 
-function OpenIn({ req, url, use }: OpenInProps) {
-  const tool = tools[use];
+function OpenIn(
+  { req, url, tool }: RequestProps & { url: string; tool: Tool },
+) {
+  const redirectUrl = tool.redirect(url);
 
-  if (tool) {
-    const redirectUrl = tool.redirect(url);
-
-    if (redirectUrl) {
-      return (
-        <p>
-          <a href={openInUrl(req.url, url, use)} title={tool.desc}>
-            Open in {tool.name}
-          </a>
-        </p>
-      );
-    }
+  if (redirectUrl) {
+    return (
+      <p>
+        <a href={openInUrl(req.url, url, tool.id)} title={tool.desc}>
+          Open in {tool.name}
+        </a>
+      </p>
+    );
   }
 }
 

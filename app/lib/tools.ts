@@ -1,4 +1,5 @@
 export interface Tool {
+  id: string;
   name: string;
   desc: string;
   redirect: (url: string) => string | undefined;
@@ -7,6 +8,7 @@ export interface Tool {
 
 export const tools: Record<string, Tool> = {
   "vscode": {
+    id: "vscode",
     name: "Visual Studio Code",
     desc:
       "Open using your desktop VS Code, using it's dev containers extension",
@@ -16,6 +18,7 @@ export const tools: Record<string, Tool> = {
   },
 
   "devpod": {
+    id: "devpod",
     name: "DevPod",
     desc: "Open using the DevPod desktop application",
     redirect: (url) => `devpod://open?source=${url}`,
@@ -23,6 +26,7 @@ export const tools: Record<string, Tool> = {
   },
 
   "codespaces": {
+    id: "codespaces",
     name: "Codespaces",
     desc: "Open via the Codespaces web site",
     redirect: (url) => {
@@ -35,6 +39,7 @@ export const tools: Record<string, Tool> = {
   },
 
   "foocode": {
+    id: "foocode",
     name: "FooCode",
     desc: "Fictional application",
     redirect: (url) => `foocode://open?url=${url}`,

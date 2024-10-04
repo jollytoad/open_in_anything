@@ -12,17 +12,15 @@
       "jsr:@http/jsx-stream@^0.3.0": "jsr:@http/jsx-stream@0.3.0",
       "jsr:@http/response@^0.23.0": "jsr:@http/response@0.23.0",
       "jsr:@http/route@^0.23.0": "jsr:@http/route@0.23.0",
-      "jsr:@std/assert@1": "jsr:@std/assert@1.0.6",
       "jsr:@std/async@^1.0.0-rc.3": "jsr:@std/async@1.0.5",
-      "jsr:@std/collections@^1.0.5": "jsr:@std/collections@1.0.6",
       "jsr:@std/encoding@^1.0.5": "jsr:@std/encoding@1.0.5",
       "jsr:@std/html@^1.0.0-rc.2": "jsr:@std/html@1.0.3",
-      "jsr:@std/http@^1.0.6": "jsr:@std/http@1.0.6",
-      "jsr:@std/internal@^1.0.4": "jsr:@std/internal@1.0.4",
+      "jsr:@std/http@^1.0.6": "jsr:@std/http@1.0.7",
       "jsr:@std/media-types@^1.0.3": "jsr:@std/media-types@1.0.3",
       "jsr:@std/net@^1.0.4": "jsr:@std/net@1.0.4",
       "jsr:@std/path@^1.0.6": "jsr:@std/path@1.0.6",
-      "jsr:@std/streams@^1.0.5": "jsr:@std/streams@1.0.5"
+      "jsr:@std/streams@^1.0.5": "jsr:@std/streams@1.0.6",
+      "npm:@types/node": "npm:@types/node@18.16.19"
     },
     "jsr": {
       "@dprint/formatter@0.4.1": {
@@ -57,8 +55,7 @@
         "integrity": "0491be6dadbfca00e9d97830cef38aae520839dfa5476e13092fbccef0297968",
         "dependencies": [
           "jsr:@http/interceptor@^0.23.0",
-          "jsr:@http/route@^0.23.0",
-          "jsr:@std/http@^1.0.6"
+          "jsr:@http/route@^0.23.0"
         ]
       },
       "@http/host-deno-local@0.23.0": {
@@ -70,11 +67,7 @@
         ]
       },
       "@http/interceptor@0.23.0": {
-        "integrity": "6882145ffc99c8865b9e2b536a86efc641841642e1a1583496df83526738bf5d",
-        "dependencies": [
-          "jsr:@http/response@^0.23.0",
-          "jsr:@http/route@^0.23.0"
-        ]
+        "integrity": "6882145ffc99c8865b9e2b536a86efc641841642e1a1583496df83526738bf5d"
       },
       "@http/jsx-stream@0.3.0": {
         "integrity": "2521d6bd20896c6c2f77e3530ca21fe4a7b7ac454d81c51958ecd7f01b6abdc0",
@@ -84,33 +77,18 @@
         ]
       },
       "@http/response@0.23.0": {
-        "integrity": "072de73480eec83b332a759872667f78e142bb228064d209881a1397b536cbca",
-        "dependencies": [
-          "jsr:@std/http@^1.0.6"
-        ]
+        "integrity": "072de73480eec83b332a759872667f78e142bb228064d209881a1397b536cbca"
       },
       "@http/route@0.23.0": {
         "integrity": "cba9b44e434d63fd164978f7e04f05233ab0834eb9b2ab65322e6b44eae6bbca",
         "dependencies": [
           "jsr:@http/fs@^0.23.0",
           "jsr:@http/response@^0.23.0",
-          "jsr:@std/collections@^1.0.5",
-          "jsr:@std/http@^1.0.6",
-          "jsr:@std/media-types@^1.0.3",
           "jsr:@std/path@^1.0.6"
-        ]
-      },
-      "@std/assert@1.0.6": {
-        "integrity": "1904c05806a25d94fe791d6d883b685c9e2dcd60e4f9fc30f4fc5cf010c72207",
-        "dependencies": [
-          "jsr:@std/internal@^1.0.4"
         ]
       },
       "@std/async@1.0.5": {
         "integrity": "31d68214bfbb31bd4c6022401d484e3964147c76c9220098baa703a39b6c2da6"
-      },
-      "@std/collections@1.0.6": {
-        "integrity": "60ad252af7df0594e6455f697920a37cd523ad66469fefcc9735e362826ac01d"
       },
       "@std/encoding@1.0.5": {
         "integrity": "ecf363d4fc25bd85bd915ff6733a7e79b67e0e7806334af15f4645c569fefc04"
@@ -118,14 +96,11 @@
       "@std/html@1.0.3": {
         "integrity": "7a0ac35e050431fb49d44e61c8b8aac1ebd55937e0dc9ec6409aa4bab39a7988"
       },
-      "@std/http@1.0.6": {
-        "integrity": "20a6f3fa4a914fbb19ea96572f2519b656232597092581ed706cd865d842d0d0",
+      "@std/http@1.0.7": {
+        "integrity": "9b904fc256678a5c9759f1a53a24a3fdcc59d83dc62099bb472683b6f819194c",
         "dependencies": [
           "jsr:@std/encoding@^1.0.5"
         ]
-      },
-      "@std/internal@1.0.4": {
-        "integrity": "62e8e4911527e5e4f307741a795c0b0a9e6958d0b3790716ae71ce085f755422"
       },
       "@std/media-types@1.0.3": {
         "integrity": "b12d30a7852f7578f4d210622df713bbfd1cbdd9b4ec2eaf5c1845ab70bab159"
@@ -136,8 +111,14 @@
       "@std/path@1.0.6": {
         "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
       },
-      "@std/streams@1.0.5": {
-        "integrity": "74e5c73d7d68eeab0d7fba3b05cbee3ba4ac5ae37c5f4e675f67e62f8f53edc4"
+      "@std/streams@1.0.6": {
+        "integrity": "022ed94e380d06b4d91c49eb70241b7289ab78b8c2b4c4bbb7eb265e4997c25c"
+      }
+    },
+    "npm": {
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
       }
     }
   },
