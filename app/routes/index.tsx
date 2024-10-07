@@ -148,6 +148,7 @@ function UrlForm({ url = "" }: { url?: string }) {
           placeholder="Paste your repository URL here"
           value={url}
         />
+        <a href={url} target="_blank" class="float:right <small>">Visit</a>
       </p>
     </form>
   );
