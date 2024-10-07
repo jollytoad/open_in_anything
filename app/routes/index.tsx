@@ -93,7 +93,7 @@ function About({ req }: RequestProps) {
       </p>
       <h3>Example</h3>
       <p>
-        <a href={exampleLink} target="_blank">Open in a dev container</a>
+        <a href={exampleLink}>Open in a dev container</a>
       </p>
       <h4>URL</h4>
       <p>Just add your URL after the hash.</p>
