@@ -47,32 +47,27 @@ function Page({ req }: RequestProps) {
         </header>
 
         <main>
-          {openUrl ? <UrlForm url={openUrl} /> : (
-            <>
-              <About req={req} />
-
-              <h3>Create a link</h3>
-
-              <UrlForm url="" />
-            </>
-          )}
+          <UrlForm url={openUrl} />
 
           {redirectUrl && tool && <OpeningMessage tool={tool} />}
 
+          {openUrl && <OpenInLinks req={req} url={openUrl} />}
+
+          <details open={!openUrl}>
+            <summary>What is this site all about?</summary>
+            <About req={req} />
+          </details>
+
+          <details>
+            <summary>What is a development container?</summary>
+            <AboutDevContainers />
+          </details>
+
           {openUrl && (
-            <>
-              <OpenInLinks req={req} url={openUrl} />
-
-              <details>
-                <summary>What is this all about?</summary>
-                <About req={req} />
-              </details>
-
-              <details>
-                <summary>Templates</summary>
-                <Templates req={req} url={openUrl} />
-              </details>
-            </>
+            <details>
+              <summary>Templates for this link</summary>
+              <Templates req={req} url={openUrl} />
+            </details>
           )}
         </main>
         <footer>
@@ -82,6 +77,7 @@ function Page({ req }: RequestProps) {
               <a href={openInHash(req.url, openUrl)}>
                 {openInHash(req.url, openUrl)}
               </a>
+              <a href={openInHash(req.url)} class="float:right">Home</a>
             </div>
           )}
         </footer>
@@ -107,7 +103,7 @@ function About({ req }: RequestProps) {
       <p class="mono-font">
         {new URL("/", req.url).toString()}#<i>&lt;your-repo-url-here&gt;</i>
       </p>
-      <h3>Example</h3>
+      <h3 class="<h5>">Example:</h3>
       <p>
         <a href={openInHash(req.url, GITHUB_REPO)}>Open in a dev container</a>
       </p>
@@ -115,10 +111,34 @@ function About({ req }: RequestProps) {
   );
 }
 
-function UrlForm({ url }: { url: string }) {
+function AboutDevContainers() {
+  return (
+    <div>
+      <p>
+        From the{" "}
+        <a href="https://containers.dev" target="_blank">
+          Development Containers
+        </a>{" "}
+        site:
+      </p>
+      <blockquote>
+        A development container (or dev container for short) allows you to use a
+        container as a full-featured development environment. It can be used to
+        run an application, to separate tools, libraries, or runtimes needed for
+        working with a codebase, and to aid in continuous integration and
+        testing. Dev containers can be run locally or remotely, in a private or
+        public cloud, in a variety of supporting tools and editors.
+      </blockquote>
+    </div>
+  );
+}
+
+function UrlForm({ url = "" }: { url?: string }) {
   return (
     <form class="box info">
-      <label for="url" class="block titlebar">Repository</label>
+      <label for="url" class="block titlebar">
+        {url ? "Repository" : "Create a link"}
+      </label>
       <p>
         <input
           id="url"
@@ -137,16 +157,16 @@ function Templates({ req, url }: RequestProps & { url: string }) {
   const exampleLink = openInHash(req.url, url);
   return (
     <div>
-      <h4>URL</h4>
-      <code>
+      <h3 class="<h5>">URL</h3>
+      <code class="block box language-url">
         {exampleLink}
       </code>
-      <h4>HTML</h4>
-      <code>
+      <h3 class="<h5>">HTML</h3>
+      <code class="block box language-html">
         {`<a href="${exampleLink}">Open in a dev container</a>`}
       </code>
-      <h4>Markdown</h4>
-      <code>
+      <h3 class="<h5>">Markdown</h3>
+      <code class="block box language-md">
         {`[Open in a dev container](${exampleLink})`}
       </code>
     </div>
@@ -203,9 +223,8 @@ function OpenIn(
         <a
           href={openInUrl(req.url, url, tool.id)}
           title={tool.desc}
-          class="bold"
         >
-          Open in {tool.name}
+          Open in <span class="bold">{tool.name}</span>
         </a>
       </p>
     );
@@ -219,7 +238,7 @@ function openInUrl(reqUrl: string, openUrl: string, use: string) {
   return href.toString();
 }
 
-function openInHash(reqUrl: string, openUrl: string) {
+function openInHash(reqUrl: string, openUrl = "") {
   const href = new URL("/", reqUrl);
   href.hash = openUrl;
   return href.toString();

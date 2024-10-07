@@ -9,3 +9,4 @@ function followHash() {
 followHash();
 
 addEventListener("hashchange", followHash);
+addEventListener("popstate", followHash);
