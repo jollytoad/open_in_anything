@@ -2,7 +2,8 @@ import { html } from "@http/response/html";
 import { seeOther } from "@http/response/see-other";
 import { prependDocType } from "@http/response/prepend-doctype";
 import { renderBody } from "@http/jsx-stream/serialize";
-import { type Tool, tools } from "../lib/tools.ts";
+import { tools } from "../lib/tools.ts";
+import type { Tool } from "../lib/types.ts";
 
 export function GET(req: Request) {
   return html(
@@ -37,29 +38,42 @@ function Page({ req }: RequestProps) {
           ? <meta http-equiv="refresh" content={`0; url=${redirectUrl}`} />
           : null}
 
-        {!openUrl ? <script src="/hash.js"></script> : null}
-
+        <script src="/hash.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.3" />
       </head>
       <body>
         <header>
-          {redirectUrl && tool
-            ? <h1>Attempting to open in {tool.name}</h1>
-            : <h1>Open in a development container</h1>}
+          <h1>Open in a development container</h1>
         </header>
 
         <main>
-          {openUrl
-            ? (
-              <p>
-                URL: <a href={openUrl}>{openUrl}</a>
-              </p>
-            )
-            : <About req={req} />}
+          {openUrl ? <UrlForm url={openUrl} /> : (
+            <>
+              <About req={req} />
+
+              <h3>Create a link</h3>
+
+              <UrlForm url="" />
+            </>
+          )}
 
           {redirectUrl && tool && <OpeningMessage tool={tool} />}
 
-          {openUrl && <OpenInLinks req={req} url={openUrl} />}
+          {openUrl && (
+            <>
+              <OpenInLinks req={req} url={openUrl} />
+
+              <details>
+                <summary>What is this all about?</summary>
+                <About req={req} />
+              </details>
+
+              <details>
+                <summary>Templates</summary>
+                <Templates req={req} url={openUrl} />
+              </details>
+            </>
+          )}
         </main>
         <footer>
           {openUrl && (
@@ -77,7 +91,6 @@ function Page({ req }: RequestProps) {
 }
 
 function About({ req }: RequestProps) {
-  const exampleLink = openInHash(req.url, GITHUB_REPO);
   return (
     <div>
       <p>
@@ -89,14 +102,42 @@ function About({ req }: RequestProps) {
         'Open in DevPod', et al.
       </p>
       <p>
-        Just have one link...
+        Just have one link:
+      </p>
+      <p class="mono-font">
+        {new URL("/", req.url).toString()}#<i>&lt;your-repo-url-here&gt;</i>
       </p>
       <h3>Example</h3>
       <p>
-        <a href={exampleLink}>Open in a dev container</a>
+        <a href={openInHash(req.url, GITHUB_REPO)}>Open in a dev container</a>
       </p>
+    </div>
+  );
+}
+
+function UrlForm({ url }: { url: string }) {
+  return (
+    <form class="box info">
+      <label for="url" class="block titlebar">Repository</label>
+      <p>
+        <input
+          id="url"
+          name="open"
+          type="url"
+          class="width:100%"
+          placeholder="Paste your repository URL here"
+          value={url}
+        />
+      </p>
+    </form>
+  );
+}
+
+function Templates({ req, url }: RequestProps & { url: string }) {
+  const exampleLink = openInHash(req.url, url);
+  return (
+    <div>
       <h4>URL</h4>
-      <p>Just add your URL after the hash.</p>
       <code>
         {exampleLink}
       </code>
@@ -115,6 +156,7 @@ function About({ req }: RequestProps) {
 function OpeningMessage({ tool }: { tool: Tool }) {
   return (
     <div class="box warn">
+      <strong class="block titlebar">Attempting to open in {tool.name}</strong>
       <p>
         Your browser should now open {tool.name}{" "}
         or ask you to confirm that you want to open it.
@@ -138,7 +180,7 @@ function OpeningMessage({ tool }: { tool: Tool }) {
 
 function OpenInLinks({ req, url }: RequestProps & { url: string }) {
   return (
-    <>
+    <div class="box ok">
       {Object.values(tools).map((tool) => (
         <OpenIn
           req={req}
@@ -146,7 +188,7 @@ function OpenInLinks({ req, url }: RequestProps & { url: string }) {
           tool={tool}
         />
       ))}
-    </>
+    </div>
   );
 }
 
@@ -158,7 +200,11 @@ function OpenIn(
   if (redirectUrl) {
     return (
       <p>
-        <a href={openInUrl(req.url, url, tool.id)} title={tool.desc}>
+        <a
+          href={openInUrl(req.url, url, tool.id)}
+          title={tool.desc}
+          class="bold"
+        >
           Open in {tool.name}
         </a>
       </p>

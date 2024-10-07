@@ -132,8 +132,7 @@
       "jsr:@http/interceptor@^0.23.0",
       "jsr:@http/jsx-stream@^0.3.0",
       "jsr:@http/response@^0.23.0",
-      "jsr:@http/route@^0.23.0",
-      "jsr:@std/assert@1"
+      "jsr:@http/route@^0.23.0"
     ]
   }
 }
