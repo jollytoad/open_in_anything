@@ -37,11 +37,10 @@ export const tools: Record<string, Tool> = {
         : undefined;
     },
   },
-
-  "foocode": {
-    id: "foocode",
-    name: "FooCode",
-    desc: "Fictional application",
-    redirect: (url) => `foocode://open?url=${url}`,
-  },
+  // "foocode": {
+  //   id: "foocode",
+  //   name: "FooCode",
+  //   desc: "Fictional application",
+  //   redirect: (url) => `foocode://open?url=${url}`,
+  // },
 };

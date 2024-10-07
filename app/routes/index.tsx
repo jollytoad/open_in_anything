@@ -16,6 +16,8 @@ interface RequestProps {
   req: Request;
 }
 
+const GITHUB_REPO = "https://github.com/jollytoad/open_in_anything";
+
 function Page({ req }: RequestProps) {
   const reqUrl = URL.parse(req.url) ?? undefined;
   const openUrl = reqUrl?.searchParams.get("open") ?? undefined;
@@ -47,11 +49,13 @@ function Page({ req }: RequestProps) {
         </header>
 
         <main>
-          {openUrl && (
-            <p>
-              URL: <a href={openUrl} target="_blank">{openUrl}</a>
-            </p>
-          )}
+          {openUrl
+            ? (
+              <p>
+                URL: <a href={openUrl}>{openUrl}</a>
+              </p>
+            )
+            : <About req={req} />}
 
           {redirectUrl && tool && <OpeningMessage tool={tool} />}
 
@@ -69,6 +73,42 @@ function Page({ req }: RequestProps) {
         </footer>
       </body>
     </html>
+  );
+}
+
+function About({ req }: RequestProps) {
+  const exampleLink = openInHash(req.url, GITHUB_REPO);
+  return (
+    <div>
+      <p>
+        Allow people to open your git repo in their preferred dev container tool
+        via a single URL.
+      </p>
+      <p>
+        Rather than providing links to 'Open in VS Code', 'Open in Codespaces',
+        'Open in DevPod', et al.
+      </p>
+      <p>
+        Just have one link...
+      </p>
+      <h3>Example</h3>
+      <p>
+        <a href={exampleLink} target="_blank">Open in a dev container</a>
+      </p>
+      <h4>URL</h4>
+      <p>Just add your URL after the hash.</p>
+      <code>
+        {exampleLink}
+      </code>
+      <h4>HTML</h4>
+      <code>
+        {`<a href="${exampleLink}">Open in a dev container</a>`}
+      </code>
+      <h4>Markdown</h4>
+      <code>
+        {`[Open in a dev container](${exampleLink})`}
+      </code>
+    </div>
   );
 }
 
