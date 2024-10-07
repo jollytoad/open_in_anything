@@ -20,9 +20,9 @@ interface RequestProps {
 const GITHUB_REPO = "https://github.com/jollytoad/open_in_anything";
 
 function Page({ req }: RequestProps) {
-  const reqUrl = URL.parse(req.url) ?? undefined;
-  const openUrl = reqUrl?.searchParams.get("open") ?? undefined;
-  const use = reqUrl?.searchParams.get("use") ?? undefined;
+  const reqUrl = requestUrl(req);
+  const openUrl = reqUrl.searchParams.get("open") ?? undefined;
+  const use = reqUrl.searchParams.get("use") ?? undefined;
 
   const tool = tools[use!];
   const redirectUrl = !!openUrl && tool?.redirect(openUrl) || undefined;
@@ -51,11 +51,11 @@ function Page({ req }: RequestProps) {
 
           {redirectUrl && tool && <OpeningMessage tool={tool} />}
 
-          {openUrl && <OpenInLinks req={req} url={openUrl} />}
+          {openUrl && <OpenInLinks reqUrl={reqUrl} url={openUrl} />}
 
           <details open={!openUrl}>
             <summary>What is this site all about?</summary>
-            <About req={req} />
+            <About reqUrl={reqUrl} />
           </details>
 
           <details>
@@ -66,7 +66,7 @@ function Page({ req }: RequestProps) {
           {openUrl && (
             <details>
               <summary>Templates for this link</summary>
-              <Templates req={req} url={openUrl} />
+              <Templates url={openInHash(reqUrl, openUrl)} />
             </details>
           )}
         </main>
@@ -74,10 +74,10 @@ function Page({ req }: RequestProps) {
           {openUrl && (
             <div>
               Link to this:{" "}
-              <a href={openInHash(req.url, openUrl)}>
-                {openInHash(req.url, openUrl)}
+              <a href={openInHash(reqUrl, openUrl)}>
+                {openInHash(reqUrl, openUrl)}
               </a>
-              <a href={openInHash(req.url)} class="float:right">Home</a>
+              <a href={openInHash(reqUrl)} class="float:right">Home</a>
             </div>
           )}
         </footer>
@@ -86,7 +86,15 @@ function Page({ req }: RequestProps) {
   );
 }
 
-function About({ req }: RequestProps) {
+function requestUrl(req: Request) {
+  const url = new URL(req.url);
+  url.protocol = req.headers.get("x-forwarded-proto") ?? url.protocol;
+  url.host = req.headers.get("x-forwarded-host") ?? url.host;
+  url.port = req.headers.get("x-forwarded-port") ?? url.port;
+  return url;
+}
+
+function About({ reqUrl }: { reqUrl: URL }) {
   return (
     <div>
       <p>
@@ -101,11 +109,11 @@ function About({ req }: RequestProps) {
         Just have one link:
       </p>
       <p class="mono-font">
-        {new URL("/", req.url).toString()}#<i>&lt;your-repo-url-here&gt;</i>
+        {new URL("/", reqUrl).toString()}#<i>&lt;your-repo-url-here&gt;</i>
       </p>
       <h3 class="<h5>">Example:</h3>
       <p>
-        <a href={openInHash(req.url, GITHUB_REPO)}>Open in a dev container</a>
+        <a href={openInHash(reqUrl, GITHUB_REPO)}>Open in a dev container</a>
       </p>
     </div>
   );
@@ -154,21 +162,20 @@ function UrlForm({ url = "" }: { url?: string }) {
   );
 }
 
-function Templates({ req, url }: RequestProps & { url: string }) {
-  const exampleLink = openInHash(req.url, url);
+function Templates({ url }: { url: string }) {
   return (
     <div>
       <h3 class="<h5>">URL</h3>
       <code class="block box language-url">
-        {exampleLink}
+        {url}
       </code>
       <h3 class="<h5>">HTML</h3>
       <code class="block box language-html">
-        {`<a href="${exampleLink}">Open in a dev container</a>`}
+        {`<a href="${url}">Open in a dev container</a>`}
       </code>
       <h3 class="<h5>">Markdown</h3>
       <code class="block box language-md">
-        {`[Open in a dev container](${exampleLink})`}
+        {`[Open in a dev container](${url})`}
       </code>
     </div>
   );
@@ -199,12 +206,12 @@ function OpeningMessage({ tool }: { tool: Tool }) {
   );
 }
 
-function OpenInLinks({ req, url }: RequestProps & { url: string }) {
+function OpenInLinks({ reqUrl, url }: { reqUrl: URL; url: string }) {
   return (
     <div class="box ok">
       {Object.values(tools).map((tool) => (
         <OpenIn
-          req={req}
+          reqUrl={reqUrl}
           url={url}
           tool={tool}
         />
@@ -214,7 +221,7 @@ function OpenInLinks({ req, url }: RequestProps & { url: string }) {
 }
 
 function OpenIn(
-  { req, url, tool }: RequestProps & { url: string; tool: Tool },
+  { reqUrl, url, tool }: { reqUrl: URL; url: string; tool: Tool },
 ) {
   const redirectUrl = tool.redirect(url);
 
@@ -222,7 +229,7 @@ function OpenIn(
     return (
       <p>
         <a
-          href={openInUrl(req.url, url, tool.id)}
+          href={openInUrl(reqUrl, url, tool.id)}
           title={tool.desc}
         >
           Open in <span class="bold">{tool.name}</span>
@@ -232,14 +239,14 @@ function OpenIn(
   }
 }
 
-function openInUrl(reqUrl: string, openUrl: string, use: string) {
+function openInUrl(reqUrl: URL, openUrl: string, use: string) {
   const href = new URL("/", reqUrl);
   href.searchParams.set("open", openUrl);
   href.searchParams.set("use", use);
   return href.toString();
 }
 
-function openInHash(reqUrl: string, openUrl = "") {
+function openInHash(reqUrl: URL, openUrl = "") {
   const href = new URL("/", reqUrl);
   href.hash = openUrl;
   return href.toString();
