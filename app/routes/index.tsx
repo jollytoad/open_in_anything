@@ -20,7 +20,7 @@ interface RequestProps {
 const GITHUB_REPO = "https://github.com/jollytoad/open_in_anything";
 
 function Page({ req }: RequestProps) {
-  const reqUrl = requestUrl(req);
+  const reqUrl = new URL(req.url);
   const openUrl = reqUrl.searchParams.get("open") ?? undefined;
   const use = reqUrl.searchParams.get("use") ?? undefined;
 
@@ -84,14 +84,6 @@ function Page({ req }: RequestProps) {
       </body>
     </html>
   );
-}
-
-function requestUrl(req: Request) {
-  const url = new URL(req.url);
-  url.protocol = req.headers.get("x-forwarded-proto") ?? url.protocol;
-  url.host = req.headers.get("x-forwarded-host") ?? url.host;
-  url.port = req.headers.get("x-forwarded-port") ?? url.port;
-  return url;
 }
 
 function About({ reqUrl }: { reqUrl: URL }) {

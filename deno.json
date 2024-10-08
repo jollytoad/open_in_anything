@@ -9,6 +9,7 @@
     "outdated": "deno run --no-lock --allow-read=. --allow-net=jsr.io,registry.npmjs.org jsr:@check/deps"
   },
   "imports": {
+    "@http/interceptor/apply-forwarded-headers": "./ext/apply_forwarded_headers.ts",
     "@http/discovery": "jsr:@http/discovery@^0.23.0",
     "@http/generate": "jsr:@http/generate@^0.23.1",
     "@http/host-deno-deploy": "jsr:@http/host-deno-deploy@^0.23.0",
