@@ -10,4 +10,12 @@ export default cascade(
     "/",
     lazy(async () => byMethod(await import("./routes/index.tsx"))),
   ),
+  byPattern(
+    "/_/tools",
+    lazy(async () => byMethod(await import("./routes/_/tools.tsx"))),
+  ),
+  byPattern(
+    "/_/open",
+    lazy(async () => byMethod(await import("./routes/_/open.tsx"))),
+  ),
 );

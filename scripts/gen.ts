@@ -12,6 +12,7 @@ function generateRoutes() {
     moduleImports: "dynamic",
     pathMapper: "@http/discovery/fresh-path-mapper",
     formatModule: dprintFormatModule(),
+    compare: import.meta.resolve("./route_comparator.ts"),
     verbose: true,
   });
 }
