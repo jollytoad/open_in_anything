@@ -5,4 +5,5 @@ export default {
   name: "Gitpod Flex",
   desc: "Open as a Gitpod workspace",
   redirect: (url) => `https://app.gitpod.io/#${url}`,
+  infoLink: "https://www.gitpod.io/docs/gitpod/introduction/overview",
 } satisfies Tool;

@@ -1,5 +1,6 @@
 import { openInUrl } from "../lib/open_in_link.ts";
 import type { Tool } from "../lib/types.ts";
+import { MoreInfoLink } from "./MoreInfoLink.tsx";
 
 export interface OpenInLinkProps {
   reqUrl: URL | string;
@@ -24,6 +25,7 @@ export function OpenInLink(
           <span>Open in&nbsp;</span>
           <span class="bold">{tool.name}</span>
         </a>
+        <MoreInfoLink tool={tool} />
       </li>
     );
   }

@@ -6,5 +6,6 @@ export default {
   desc: "Open using your desktop VS Code, using it's dev containers extension",
   redirect: (url) =>
     `vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=${url}&windowId=_blank`,
-  installLink: "https://code.visualstudio.com/",
+  infoLink: "https://code.visualstudio.com/docs/devcontainers/containers",
+  installLink: "https://code.visualstudio.com/docs/setup/setup-overview",
 } satisfies Tool;

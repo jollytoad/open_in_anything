@@ -11,4 +11,6 @@ export default {
       ? `https://codespaces.new/${owner}/${repo}`
       : undefined;
   },
+  infoLink:
+    "https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces",
 } satisfies Tool;

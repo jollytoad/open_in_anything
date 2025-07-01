@@ -5,5 +5,6 @@ export default {
   name: "DevPod",
   desc: "Open using the DevPod desktop application",
   redirect: (url) => `devpod://open?source=${url}`,
-  installLink: "https://devpod.sh/",
+  infoLink: "https://devpod.sh/docs/what-is-devpod",
+  installLink: "https://devpod.sh/docs/getting-started/install",
 } satisfies Tool;
