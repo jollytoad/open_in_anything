@@ -3,5 +3,9 @@ import pathnameLexicalRouteComparator from "@http/discovery/pathname-lexical-rou
 
 export default function (a: ComparableRoute, b: ComparableRoute): number {
   // Ensure / is the first route checked
-  return a.pattern.pathname === "/" ? -1 : pathnameLexicalRouteComparator(a, b);
+  return a.pattern.pathname === "/"
+    ? -1
+    : b.pattern.pathname === "/"
+    ? 1
+    : pathnameLexicalRouteComparator(a, b);
 }

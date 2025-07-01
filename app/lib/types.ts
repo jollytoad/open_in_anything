@@ -5,7 +5,3 @@ export interface Tool {
   redirect: (url: string) => string | undefined;
   installLink?: string;
 }
-
-export interface RequestProps {
-  req: Request;
-}

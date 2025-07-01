@@ -7,8 +7,8 @@ import { AboutDevContainers } from "../components/AboutDevContainers.tsx";
 import { UrlForm } from "../components/UrlForm.tsx";
 import { Templates } from "../components/Templates.tsx";
 import { OpeningMessage } from "../components/OpeningMessage.tsx";
-import type { RequestProps } from "../lib/types.ts";
 import { renderHtml } from "../lib/render_html.tsx";
+import type { RequestProps } from "@http/jsx-stream/types";
 
 export const GET = renderHtml(Page);
 

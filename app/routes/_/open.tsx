@@ -1,7 +1,7 @@
 import { tools } from "../../lib/tools.ts";
 import { OpeningMessage } from "../../components/OpeningMessage.tsx";
-import type { RequestProps } from "../../lib/types.ts";
 import { renderHtml } from "../../lib/render_html.tsx";
+import type { RequestProps } from "@http/jsx-stream/types";
 
 export const GET = renderHtml(Page);
 
